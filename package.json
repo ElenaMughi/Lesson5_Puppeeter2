@@ -1,0 +1,27 @@
+{
+  "name": "lesson5.1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.test.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ElenaMughi/Lesson5_Puppeeter2.git"
+  },
+  "author": "Vasilyuk E.N.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ElenaMughi/Lesson5_Puppeeter2/issues"
+  },
+  "homepage": "https://github.com/ElenaMughi/Lesson5_Puppeeter2#readme",
+  "dependencies": {
+    "jest": "^28.1.2",
+    "jest-puppeteer": "^6.1.1",
+    "puppeteer": "^15.3.2"
+  }
+}
