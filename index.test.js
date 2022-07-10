@@ -1,16 +1,17 @@
 const puppeteer = require("puppeteer");
+const { clickElement, getText } = require("./lib/command.js");
+let page;
 
 describe("Netology page tests", () => {
   beforeEach(() => {
     page = browser.newPage();
   });
 
-  afterEach( () => {
+  afterEach(() => {
     page.close();
   });
 
-  test("test", async (page) => {
-
+  test("test1", async () => {
     await page.goto("http://qamid.tmweb.ru/client/index.php");
 
     await page.click('li > [data-seance-id="129"]');
