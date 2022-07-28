@@ -2,28 +2,28 @@ const puppeteer = require("puppeteer");
 const { clickElement, getText } = require("./lib/command.js");
 let page;
 
-describe("Netology page tests", () => {
-  beforeEach(() => {
-    page = browser.newPage();
+describe("GoToTheCinema", () => {
+  beforeEach(async () => {
+    page = await browser.newPage();
   });
 
   afterEach(() => {
     page.close();
   });
 
-  test("test1", async () => {
-    await page.goto("http://qamid.tmweb.ru/client/index.php");
-
-    await page.click('li > [data-seance-id="129"]');
-    await expect(page).toHaveURL("http://qamid.tmweb.ru/client/hall.php");
-
-    await page.click("div:nth-child(7) > span:nth-child(1)");
-
-    await page.click('[class="acceptin-button"]');
-    await expect(page).toHaveURL("http://qamid.tmweb.ru/client/payment.php");
-
-    await page.click('[class="acceptin-button"]');
-    await expect(page).toHaveURL("http://qamid.tmweb.ru/client/ticket.php");
+  test("BookTicket", async () => {
+    await page.goto("https://qamid.tmweb.ru/client/index.php");
+ //   expect(await page.url()).toBe("https://qamid.tmweb.ru/client/index.php");
+    // Click text=23:45
+    const firstLink = await page.$$('[class="movie-seances__time-block"]');
+    await firstLink[1].click();
+    //await page.click('[data-seance-id="139"]');
+    //await page.waitForSelector("Начало сеанса: 23:45");
+    await page.$$("div:nth-child(6) > span").first().click();
+    // Click text=Забронировать
+    await page.$("text=Забронировать").click();
+    // Click text=Получить код бронирования
+    await page.locator("text=Получить код бронирования").click();
 
     const title = await page.$eval("h2", (link) => link.textContent);
     console.log(title);
