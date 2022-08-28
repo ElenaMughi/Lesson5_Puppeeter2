@@ -6,51 +6,56 @@ const {
   setDefaultTimeout,
   After,
 } = require("cucumber");
-const { puppeteer } = require("puppeteer");
+const puppeteer = require("puppeteer");
 const { expect } = require("chai");
-let page;
 
-setDefaultTimeout(60000);
+// setDefaultTimeout(60000);
 
-Before(async () => {
-  page = await browser.newPage();
+Before(async function () {
+  const browser = await puppeteer.launch({
+    headless: false,
+    setDefaultTimeout: 60000,
+  });
+  const page = await browser.newPage();
+  this.page = page;
+  this.browser = browser;
 });
 
-After(() => {
-  browser.close();
+After(async function () {
+  this.browser.close();
 });
 
 Given("user is on {string}", async function (string) {
-  await page.goto(string);
-  return "pending";
+  return await this.page.goto(`${string}`);
 });
-When(
-  "user take a ticket {int} day, {int} row {int} sit",
-  async function (int, int2, int3) {
-    await page.waitForSelector('[class="page-nav__day-week"]');
-    await (await page.$$('[class="page-nav__day-week"]'))[int].click();
 
-    await page.waitForSelector('[class="movie-seances__time-block"]');
-    await page.click('[class="movie-seances__time-block"]');
+When("user select {int} day", async function (int) {
+  this.page.waitForSelector('[class="page-nav__day-week"]');
+  await (await this.page.$$('[class="page-nav__day-week"]'))[int].click();
+});
 
-    await page.waitForSelector("div:nth-child(6) > span");
-    await (await page.$$(`div:nth-child(${int2}) > span`))[int3].click();
+When("user take a ticket {int} row {int} sit", async function (int, int2) {
+  console.log(int2);
+  this.page.waitForSelector('[class="movie-seances__time-block"]');
+  await this.page.click('[class="movie-seances__time-block"]');
 
-    await page.waitForSelector('[class="acceptin-button"]');
-    await page.click('[class="acceptin-button"]');
+  this.page.waitForSelector(`div > div:nth-child(${int}) > span`);
+  await this.page.click(`div:nth-child(${int}) > span:nth-child(${int2})`);
 
-    await page.waitForSelector('[class="ticket__check-title"]');
-    await page.waitForSelector('[class="acceptin-button"]');
-    await page.click('[class="acceptin-button"]');
-    return "pending";
-  }
-);
+  this.page.waitForSelector('[class="acceptin-button"]');
+  this.page.click('[class="acceptin-button"]');
+
+  this.page.waitForSelector('[class="ticket__check-title"]');
+  this.page.waitForSelector('[class="acceptin-button"]');
+  this.page.click('[class="acceptin-button"]');
+});
+
 Then("user seen {string}", async function (string) {
-  await page.waitForSelector('[class="ticket__check-title"]');
-  const title = await page.$eval(
+  console.log(string);
+  await this.page.waitForSelector('[class="ticket__check-title"]');
+  const title = await this.page.$eval(
     '[class="ticket__check-title"]',
     (link) => link.textContent
   );
-  expect(title).toEqual("Электронный билет");
-  return "pending";
+  expect(title).contain("Электронный билет");
 });

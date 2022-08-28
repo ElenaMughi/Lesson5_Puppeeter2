@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "jest index.test.js",
-    "cucumber": "cucumber-js"
+    "cucumber": "cucumber-js --publish"
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
   "dependencies": {
     "chai": "^4.3.6",
     "cucumber": "^7.0.0-rc",
-    "jest": "^28.1.2",
+    "jest": "^28.1.3",
     "jest-puppeteer": "^6.1.1",
     "puppeteer": "^15.5.0"
   },
